@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import {
   Button,
   FormContainer,
@@ -10,33 +9,28 @@ import {
 import { Formik } from "formik";
 import { SignupSchema } from "../../utils/validation";
 import { initialValuesForm } from "../../utils/initialValuesForm";
+import axios from "axios";
+import { toast } from "react-toastify";
 
-export function Form({ getUsers, onEdit, setOnEdit }: any) {
-  const ref = useRef<HTMLInputElement>();
-
-  useEffect(() => {
-    if (onEdit) {
-      const user = ref.current;
-      user!.name = onEdit.name;
+export function Form({ setUsers, users }: any) {
+  async function handleAdd(values: any) {
+    try {
+      await axios.post("http://localhost:8800", values);
+      const newUsers = [...users, values];
+      setUsers(newUsers);
+      toast.success("Created user success");
+    } catch (error: any) {
+      toast.error(error);
     }
-  }, [onEdit]);
+  }
 
   return (
     <Formik
       initialValues={initialValuesForm}
       // validationSchema={SignupSchema}
-      onSubmit={(values) => {
-        console.log(values);
-      }}
+      onSubmit={(values) => handleAdd(values)}
     >
-      {({
-        values,
-        errors,
-        touched,
-        handleChange,
-        handleBlur,
-        handleSubmit,
-      }) => (
+      {({ values, handleChange, handleBlur, handleSubmit, isValid, dirty }) => (
         <form onSubmit={handleSubmit}>
           <FormContainer>
             <InputArea>
@@ -81,7 +75,9 @@ export function Form({ getUsers, onEdit, setOnEdit }: any) {
               />
               <ErrorMessageInput name="date_birth" component="div" />
             </InputArea>
-            <Button type="submit">Salvar</Button>
+            <Button type="submit" disabled={!(dirty && isValid)}>
+              Salvar
+            </Button>
           </FormContainer>
         </form>
       )}
