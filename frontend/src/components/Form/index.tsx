@@ -1,8 +1,19 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { Button, FormContainer, Input, InputArea, Label } from "./style";
 
 export function Form({ onEdit }: any) {
   const ref = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    if (onEdit) {
+      const user = ref.current;
+
+      user.name.value = onEdit.name;
+      user.email.value = onEdit.email;
+      user.fone.value = onEdit.fone;
+      user.date_birth.value = onEdit.date_birth;
+    }
+  }, []);
 
   return (
     <FormContainer>
