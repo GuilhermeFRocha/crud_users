@@ -35,8 +35,8 @@ export function App() {
     <>
       <Container>
         <h1>Users</h1>
-        <Form />
-        <Grid users={users} setUsers={setUsers} />
+        <Form setUsers={setUsers}/>
+        <Grid users={users} setUsers={setUsers}  setOnEdit={setOnEdit}/>
       </Container>
       <ToastContainer autoClose={3000} position="bottom-left" />
       <GlobalStyle />

@@ -1,8 +1,12 @@
 import { useRef } from "react";
 import { Button, FormContainer, Input, InputArea, Label } from "./style";
 
-export function Form({ onEdit }: any) {
+export function Form({ onEdit, setUsers }: any) {
   const ref = useRef<HTMLInputElement>();
+
+  function handleSave () {
+    setUsers()
+  }
 
   return (
     <FormContainer>
@@ -22,7 +26,7 @@ export function Form({ onEdit }: any) {
         <Label>Date of Birth</Label>
         <Input name="date_birth" type="date" />
       </InputArea>
-      <Button type="submit">Salvar</Button>
+      <Button type="submit" onClick={() => {handleSave()}}>Salvar</Button>
     </FormContainer>
   );
 }
