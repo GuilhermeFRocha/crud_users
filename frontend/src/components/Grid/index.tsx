@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 interface UsersProps {
   users: UserProps[];
   setUsers: (users: UserProps[]) => void;
-  setOnEdit: (users: any) => void
+  setOnEdit: (user: any) => void;
 }
 
 interface UserProps {
@@ -17,11 +17,6 @@ interface UserProps {
 }
 
 export function Grid({ users, setUsers, setOnEdit }: UsersProps) {
-
-  function handleEdit (users: UserProps) {
-    setOnEdit(users)
-  }
-
   async function handleDelete(id: any) {
     await axios
       .delete(`http://localhost:8800/${id}`)
@@ -31,6 +26,10 @@ export function Grid({ users, setUsers, setOnEdit }: UsersProps) {
         toast.success(data);
       })
       .catch(({ data }) => toast.error(data));
+  }
+
+  async function handleEdit(user: any) {
+    setOnEdit(user);
   }
 
   return (
@@ -54,7 +53,7 @@ export function Grid({ users, setUsers, setOnEdit }: UsersProps) {
               {user.fone}
             </Td>
             <Td alignCenter width="5%">
-              <FaEdit onClick={() => handleEdit(user)}/>
+              <FaEdit onClick={() => handleEdit(user)} />
             </Td>
             <Td alignCenter width="5%">
               <FaTrash onClick={() => handleDelete(user.id)} />
