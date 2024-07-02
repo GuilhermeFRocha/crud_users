@@ -2,6 +2,8 @@ import { Table, Tbody, Td, Th, Thead, Tr } from "./style";
 import axios from "axios";
 import { FaTrash, FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
+import { ModalForm } from "../ModalForm";
+import { useState } from "react";
 
 interface UsersProps {
   users: UserProps[];
@@ -16,7 +18,10 @@ interface UserProps {
   id: string;
 }
 
-export function Grid({ users, setUsers, setOnEdit }: UsersProps) {
+export function Grid({ users, setUsers }: UsersProps) {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [userEdit, setUserEdit] = useState([]);
+
   async function handleDelete(id: any) {
     await axios
       .delete(`http://localhost:8800/${id}`)
@@ -29,44 +34,51 @@ export function Grid({ users, setUsers, setOnEdit }: UsersProps) {
   }
 
   async function handleEdit(user: any) {
-    setOnEdit(user);
+    setModalIsOpen(true);
+    setUserEdit(user);
   }
 
   return (
-    <Table>
-      <Thead>
-        <Tr>
-          <Th>Nome</Th>
-          <Th>Email</Th>
-          <Th onlyWeb>Fone</Th>
-          <Th></Th>
-          <Th></Th>
-        </Tr>
-      </Thead>
-
-      <Tbody>
-        {users.map((user: UserProps, i: number | any) => (
-          <Tr id={i}>
-            <Td width="30%">{user.name}</Td>
-            <Td width="30%">{user.email}</Td>
-            <Td width="20%" onlyWeb>
-              {user.fone}
-            </Td>
-            <Td alignCenter width="5%">
-              <FaEdit
-                onClick={() => handleEdit(user)}
-                style={{ cursor: "pointer" }}
-              />
-            </Td>
-            <Td alignCenter width="5%">
-              <FaTrash
-                onClick={() => handleDelete(user.id)}
-                style={{ cursor: "pointer" }}
-              />
-            </Td>
+    <>
+      <Table>
+        <Thead>
+          <Tr>
+            <Th>Nome</Th>
+            <Th>Email</Th>
+            <Th onlyWeb>Fone</Th>
           </Tr>
-        ))}
-      </Tbody>
-    </Table>
+        </Thead>
+
+        <Tbody>
+          {users.map((user: UserProps, i: number | any) => (
+            <Tr id={i}>
+              <Td width="30%">{user.name}</Td>
+              <Td width="30%">{user.email}</Td>
+              <Td width="20%" onlyWeb>
+                {user.fone}
+              </Td>
+              <Td alignCenter width="5%">
+                <FaEdit
+                  onClick={() => handleEdit(user)}
+                  style={{ cursor: "pointer" }}
+                />
+              </Td>
+              <Td alignCenter width="5%">
+                <FaTrash
+                  onClick={() => handleDelete(user.id)}
+                  style={{ cursor: "pointer" }}
+                />
+              </Td>
+            </Tr>
+          ))}
+        </Tbody>
+      </Table>
+
+      <ModalForm
+        modalIsOpen={modalIsOpen}
+        setModalIsOpen={setModalIsOpen}
+        userEdit={userEdit}
+      />
+    </>
   );
 }
