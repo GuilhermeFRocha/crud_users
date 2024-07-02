@@ -14,6 +14,11 @@ import { toast } from "react-toastify";
 
 export function Form({ setUsers, users }: any) {
   async function handleAdd(values: any) {
+    const userExists = users.some((user: any) => user.name === values.name);
+    if (userExists) {
+      toast.error("User with this name already exists");
+      return;
+    }
     try {
       await axios.post("http://localhost:8800", values);
       const newUsers = [...users, values];
@@ -27,7 +32,7 @@ export function Form({ setUsers, users }: any) {
   return (
     <Formik
       initialValues={initialValuesForm}
-      // validationSchema={SignupSchema}
+      validationSchema={SignupSchema}
       onSubmit={(values) => handleAdd(values)}
     >
       {({ values, handleChange, handleBlur, handleSubmit, isValid, dirty }) => (

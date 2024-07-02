@@ -53,10 +53,16 @@ export function Grid({ users, setUsers, setOnEdit }: UsersProps) {
               {user.fone}
             </Td>
             <Td alignCenter width="5%">
-              <FaEdit onClick={() => handleEdit(user)} />
+              <FaEdit
+                onClick={() => handleEdit(user)}
+                style={{ cursor: "pointer" }}
+              />
             </Td>
             <Td alignCenter width="5%">
-              <FaTrash onClick={() => handleDelete(user.id)} />
+              <FaTrash
+                onClick={() => handleDelete(user.id)}
+                style={{ cursor: "pointer" }}
+              />
             </Td>
           </Tr>
         ))}
